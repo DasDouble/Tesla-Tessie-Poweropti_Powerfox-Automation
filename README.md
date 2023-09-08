@@ -1,5 +1,5 @@
 # Tesla-Tessie-Poweropti_Powerfox-Automation
-This script is primarily designed for German households, as they typically have a standardized electricity meter. With digital electricity meters, you can monitor whether your solar power system is importing or exporting energy to the grid. This script checks this every 60 seconds. If the solar power produced by your household minus your household consumption is sufficient to charge your Tesla, the script will initiate charging when the Tesla is at your home location. (Please ensure that you enter your home address exactly as it appears in your Tesla App / Tessie).
+This script is primarily designed for German households, as they typically have a standardized electricity meter. With digital electricity meters, you can monitor whether your solar power system is importing or exporting energy to the grid. This script checks this every 60 seconds. If the solar power produced by your household minus your household consumption is sufficient to charge your Tesla, the script will initiate charging when the Tesla is at your home location. (Please ensure that you enter your home address exactly as it appears in your Tesla App / Tessie App).
 
 # Prerequisites:
 0.) A computer that can run 24/7
