@@ -12,12 +12,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Main {
-    private static final int MIN_POWER_THRESHOLD = 1149; // Minimum power in Watts for charging
-    private static final String Authorization = "Authorization";  // Insert your authentication token here
-    private static final String YOUR_AUTHENTICATION_TOKEN = "Your_Authentication_Token";  // Insert your authentication token here
-    private static final String VRN = "5YJXCAE43LF123456";  // Example, insert your authentication token here
-    private static final String BEARER = "1234567890ABCDEF1234567890ABCDEF"; // Insert your authentication token here
-    private static final String HOME_ADDRESS = "Sample Street 1, 12345 Sample City"; // Insert your address here. Park Tesla in front of your home to check how the address is displayed in the app.
+    private static final int MIN_POWER_THRESHOLD = 1149; // Minimum power in Watts for charging (1150 Watts = 5 Ampere @ 230V)
+    private static final String AUTHORIZATION = "Authorization";  // Insert your Authorization token of Poweropti here
+    private static final String YOUR_AUTHENTICATION_TOKEN = "Your_Authentication_Token";  // Insert your authentication token of Poweropti here
+    private static final String VRN = "5YPXLAK43LF123456";  // Example-value, insert your Vehicle Registration Number (see in your Tesla App) here
+    private static final String BEARER = "1234567890ABCDEF1234567890ABCDEF"; // Insert your Bearer token (see in Tessie) here
+    private static final String HOME_ADDRESS = "Sample Street 1, 12345 Sample City"; // Insert your address (where your solar panel is) here. Park Tesla in front of home to check how the address is displayed in the Tessie app.
 
     public static void main(String[] args) {
         Timer timer = new Timer();
@@ -26,10 +26,11 @@ public class Main {
             public void run() {
                 checkCharging();
             }
-        }, 0, 60000);
+        }, 0, 60000);    // 60000 = 60 seconds.
     }
 
     public static void checkCharging() {
+    // check if Tesla is home, if power is enough to charge and starts / stops charging accordingly.
         if (isTeslaAtHome()) {
             int currentPower = getCurrentPower();
             if (currentPower >= MIN_POWER_THRESHOLD) {
@@ -66,6 +67,8 @@ public class Main {
     }
 
     public static int getCurrentPower() {
+        // Powerfox / Poweropti API call to get power
+        // https://www.powerfox.energy/wp-content/uploads/2020/05/powerfox-Kunden-API.pdf
         String apiUrl = "https://backend.powerfox.energy/api/2.0/my/main/current";
         int currentPower = 0;
 
@@ -73,7 +76,7 @@ public class Main {
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty(Authorization, YOUR_AUTHENTICATION_TOKEN);
+            connection.setRequestProperty(AUTHORIZATION, YOUR_AUTHENTICATION_TOKEN);
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
