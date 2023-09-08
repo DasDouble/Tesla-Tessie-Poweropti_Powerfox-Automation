@@ -11,15 +11,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
 public class Main {
-    private static final int MIN_POWER_THRESHOLD = 1150; // Minimale Leistung in Watt für das Laden
-    private static final String Authorization = "Authorization";  // Fügen Sie Ihr Authentifizierungstoken hier ein
-    private static final String IHR_AUTHENTIFIZIERUNGSTOKEN = "Ihr_Authentifizierungstoken";  // Fügen Sie Ihr Authentifizierungstoken hier ein
-    private static final String VRN = "5YJXCAE43LF123456";  // Example, Fügen Sie Ihr Authentifizierungstoken hier ein
-    private static final String BEARER = "1234567890ABCDEF1234567890ABCDEF" // Fügen Sie Ihr Authentifizierungstoken hier ein
-    private static final String HOMEADDRESS = "Musterstraße 1, 12345 Musterstadt"; // Fügen Sie Ihre Adresse hier ein. Parke Tesla davor zu Hause um in App zu schauen, wie Adresse angezeigt wird.
-
+    private static final int MIN_POWER_THRESHOLD = 1149; // Minimum power in Watts for charging
+    private static final String Authorization = "Authorization";  // Insert your authentication token here
+    private static final String YOUR_AUTHENTICATION_TOKEN = "Your_Authentication_Token";  // Insert your authentication token here
+    private static final String VRN = "5YJXCAE43LF123456";  // Example, insert your authentication token here
+    private static final String BEARER = "1234567890ABCDEF1234567890ABCDEF"; // Insert your authentication token here
+    private static final String HOME_ADDRESS = "Sample Street 1, 12345 Sample City"; // Insert your address here. Park Tesla in front of your home to check how the address is displayed in the app.
 
     public static void main(String[] args) {
         Timer timer = new Timer();
@@ -43,69 +41,66 @@ public class Main {
     }
 
     public static boolean isTeslaAtHome() {
-        // Tessie API-Aufruf, um den Standort des Tesla zu überprüfen
+        // Tessie API call to check Tesla's location
         // URL: https://api.tessie.com/{vin}/location
-          OkHttpClient client = new OkHttpClient();
-    boolean isAtHome = false;
+        OkHttpClient client = new OkHttpClient();
+        boolean isAtHome = false;
 
-    Request request = new Request.Builder()
-        .url("https://api.tessie.com/"+VRN+"/location")
-        .get()
-        .addHeader("accept", "application/json")
-        .addHeader("authorization", "Bearer "+BEARER)
-        .build();
+        Request request = new Request.Builder()
+            .url("https://api.tessie.com/"+VRN+"/location")
+            .get()
+            .addHeader("accept", "application/json")
+            .addHeader("authorization", "Bearer "+BEARER)
+            .build();
 
-    try (Response response = client.newCall(request).execute()) {
-        String responseBody = response.body().string();
-        if (responseBody.contains(HOMEADDRESS)) {
-            isAtHome = true;
+        try (Response response = client.newCall(request).execute()) {
+            String responseBody = response.body().string();
+            if (responseBody.contains(HOME_ADDRESS)) {
+                isAtHome = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
+
+        return isAtHome;
     }
 
-    return isAtHome;
-}
-
-
-    
     public static int getCurrentPower() {
         String apiUrl = "https://backend.powerfox.energy/api/2.0/my/main/current";
         int currentPower = 0;
-    
+
         try {
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty(Authorization, Ihr_Authentifizierungstoken);
-    
+            connection.setRequestProperty(Authorization, YOUR_AUTHENTICATION_TOKEN);
+
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 StringBuffer response = new StringBuffer();
-    
+
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
                 in.close();
-    
-                // JSON-Antwort parsen
+
+                // Parse JSON response
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 currentPower = jsonResponse.getInt("Watt");
             } else {
-                System.out.println("GET-Anfrage fehlgeschlagen. Antwortcode: " + responseCode);
+                System.out.println("GET request failed. Response code: " + responseCode);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+
         return currentPower;
     }
-    
 
     public static void startCharging() {
-        // Tessie API-Aufruf, um das Laden zu starten
+        // Tessie API call to start charging
         // URL: https://api.tessie.com/{vin}/command/start_charging
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -114,7 +109,7 @@ public class Main {
             .addHeader("accept", "application/json")
             .addHeader("authorization", "Bearer "+BEARER)
             .build();
-    
+
         try (Response response = client.newCall(request).execute()) {
             // Do something with the response if needed
         } catch (IOException e) {
@@ -123,7 +118,7 @@ public class Main {
     }
 
     public static void stopCharging() {
-        // Tessie API-Aufruf, um das Laden zu stoppen
+        // Tessie API call to stop charging
         // URL: https://api.tessie.com/{vin}/command/stop_charging
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -132,7 +127,7 @@ public class Main {
             .addHeader("accept", "application/json")
             .addHeader("authorization", "Bearer "+BEARER)
             .build();
-    
+
         try (Response response = client.newCall(request).execute()) {
             System.out.println("Stop charging.");
         } catch (IOException e) {
