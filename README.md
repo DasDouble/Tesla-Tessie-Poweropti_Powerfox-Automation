@@ -4,11 +4,11 @@ This script is primarily designed for German households, as they typically have 
 # Prerequisites:
 0.) A computer that can run 24/7
 
-1.) The Tessie App for starting/stopping the charging: Tessie Website
+1.) The Tessie App for starting/stopping the charging: Tessie Website: https://tessie.com
 
-2.) A reader to monitor your solar power output: Poweropti by Powerfox
+2.) A reader to monitor your solar power output: Poweropti by Powerfox: https://poweropti.powerfox.energy/
 
-3.) The code for your digital electricity meter, like this one: YouTube Video
+3.) The code for your digital electricity meter, like this one: YouTube Video: https://poweropti.powerfox.energy/
 
 # Costs:
 Tessie App: Available as a monthly subscription (€6) or a one-time lifetime purchase (€230)
